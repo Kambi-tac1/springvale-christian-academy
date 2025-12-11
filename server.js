@@ -50,7 +50,12 @@ const upload = multer({
 
 // SQLite DB
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'database.sqlite');
-const db = new sqlite3.Database(DB_PATH);
+const db = new sqlite3.Database(DB_PATH, (err) => {
+  if (err) {
+    console.error('Failed to open database:', err);
+    process.exit(1);
+  }
+});
 
 db.serialize(() => {
   db.run(`
@@ -64,27 +69,48 @@ db.serialize(() => {
       file_path TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
-  `);
+  `, (err) => {
+    if (err) console.error('Failed to ensure applications table exists:', err);
+  });
 });
 
 // Email transporter (Gmail example)
-const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE || 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+let transporter = null;
+if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+  transporter = nodemailer.createTransport({
+    service: process.env.EMAIL_SERVICE || 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+
+  transporter.verify((err, success) => {
+    if (err) console.warn('Email transporter verification failed:', err.message || err);
+    else console.log('Email transporter verified');
+  });
+} else {
+  console.log('Email transporter not configured (EMAIL_USER/EMAIL_PASS missing)');
+}
 
 // Basic auth middleware
 const basicAuth = (req, res, next) => {
-  const auth = req.headers.authorization;
-  if (!auth) return res.status(401).json({ error: 'Missing authorization' });
-  const [scheme, credentials] = auth.split(' ');
-  if (scheme !== 'Basic') return res.status(401).json({ error: 'Invalid auth scheme' });
-  const [user, pass] = Buffer.from(credentials, 'base64').toString().split(':');
-  if (user === process.env.ADMIN_USERNAME && pass === process.env.ADMIN_PASSWORD) return next();
-  res.status(403).json({ error: 'Invalid credentials' });
+  try {
+    const auth = req.headers.authorization;
+    if (!auth) return res.status(401).json({ error: 'Missing authorization' });
+    const [scheme, credentials] = auth.split(' ');
+    if (scheme !== 'Basic' || !credentials) return res.status(401).json({ error: 'Invalid auth scheme' });
+    const decoded = Buffer.from(credentials, 'base64').toString();
+    const sep = decoded.indexOf(':');
+    if (sep === -1) return res.status(401).json({ error: 'Invalid authorization format' });
+    const user = decoded.slice(0, sep);
+    const pass = decoded.slice(sep + 1);
+    if (user === process.env.ADMIN_USERNAME && pass === process.env.ADMIN_PASSWORD) return next();
+    return res.status(403).json({ error: 'Invalid credentials' });
+  } catch (err) {
+    console.error('Auth parse error:', err);
+    return res.status(400).json({ error: 'Authorization parsing failed' });
+  }
 };
 
 // Routes
@@ -94,13 +120,14 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 app.post('/api/applications', submitLimiter, upload.single('document'), [
   body('name').trim().isLength({ min: 2 }).withMessage('Name must be at least 2 characters'),
   body('email').isEmail().withMessage('Invalid email'),
-  body('phone').isMobilePhone().withMessage('Invalid phone number')
+  // Use a flexible phone check to avoid locale issues in validators
+  body('phone').trim().isLength({ min: 7 }).withMessage('Invalid phone number')
 ], (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
   const { name, email, phone, class_level, notes } = req.body;
-  const filePath = req.file ? path.relative(__dirname, req.file.path) : null;
+  const filePath = req.file ? `/uploads/${req.file.filename}` : null;
 
   const stmt = db.prepare(`INSERT INTO applications (name, email, phone, class_level, notes, file_path) VALUES (?,?,?,?,?,?)`);
   stmt.run(name, email, phone, class_level, notes, filePath, function (err) {
