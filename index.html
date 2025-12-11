@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Springvale Christian Academy — nurturing minds from Baby Class through Grade 7. Admissions open for the upcoming school year.">
+    <title>Springvale Christian Academy — Baby Class to Grade 7</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the school theme */
+        :root {
+            --color-primary: #1e3a8a; /* Dark Blue */
+            --color-secondary: #fcd34d; /* Bright Yellow */
+            --color-accent: #10b981; /* Emerald Green */
+            --color-light: #f9fafb; /* Light Gray */
+        }
+        .text-primary { color: var(--color-primary); }
+        .bg-primary { background-color: var(--color-primary); }
+        .text-secondary { color: var(--color-secondary); }
+        .bg-secondary { background-color: var(--color-secondary); }
+        .text-accent { color: var(--color-accent); }
+
+        /* Font setup */
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            color: #374151; /* Default text color */
+        }
+
+        /* Responsive Hero Image Placeholder */
+        .hero-bg {
+            background-image: url("https://placehold.co/1200x600/1e3a8a/fcd34d?text=Springvale+Christian+Academy");
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon.ico">
+    <script>
+        // Simple mobile menu toggle logic + initialize icons
+        document.addEventListener('DOMContentLoaded', () => {
+            // initialize lucide icons in the document
+            if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                lucide.createIcons();
+            }
+
+            const menuBtn = document.getElementById('menu-button');
+            const menu = document.getElementById('mobile-menu');
+            if (!menuBtn || !menu) return;
+
+            menuBtn.addEventListener('click', () => {
+                const isHidden = menu.classList.toggle('hidden');
+                // toggle icon markup and re-init icons
+                menuBtn.innerHTML = isHidden
+                    ? '<svg data-lucide="menu" class="w-6 h-6" aria-hidden="true"></svg><span class="sr-only">Open menu</span>'
+                    : '<svg data-lucide="x" class="w-6 h-6" aria-hidden="true"></svg><span class="sr-only">Close menu</span>';
+                // set accessible state
+                menuBtn.setAttribute('aria-expanded', (!isHidden).toString());
+                if (window.lucide && typeof window.lucide.createIcons === 'function') lucide.createIcons();
+            });
+        });
+    </script>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-50 shadow-md bg-white">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <!-- Logo/School Name -->
+            <a href="#" class="flex items-center space-x-3 text-primary">
+                <img src="logo.jpg" alt="Springvale Christian Academy logo" class="w-10 h-10 object-contain rounded-md" />
+                <span class="text-2xl font-extrabold tracking-tight">Springvale Christian Academy</span>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex space-x-8 font-medium">
+                <a href="#academics" class="text-gray-600 hover:text-primary transition duration-300">Academics</a>
+                <a href="#levels" class="text-gray-600 hover:text-primary transition duration-300">Class Levels</a>
+                <a href="#admissions" class="text-gray-600 hover:text-primary transition duration-300">Admissions</a>
+                <a href="#contact" class="text-gray-600 hover:text-primary transition duration-300">Contact Us</a>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-button" class="md:hidden p-2 rounded-lg text-primary hover:bg-gray-100 transition duration-200" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+                <svg data-lucide="menu" class="w-6 h-6" aria-hidden="true"></svg>
+                <span class="sr-only">Open menu</span>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+            <nav class="flex flex-col space-y-2 p-4 font-medium">
+                <a href="#academics" class="block py-2 text-gray-700 hover:bg-gray-50 rounded-lg">Academics</a>
+                <a href="#levels" class="block py-2 text-gray-700 hover:bg-gray-50 rounded-lg">Class Levels</a>
+                <a href="#admissions" class="block py-2 text-gray-700 hover:bg-gray-50 rounded-lg">Admissions</a>
+                <a href="#contact" class="block py-2 text-gray-700 hover:bg-gray-50 rounded-lg">Contact Us</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-bg py-16 md:py-32 text-center text-white shadow-xl">
+            <div class="container mx-auto px-4 bg-primary bg-opacity-85 p-8 rounded-xl max-w-2xl">
+                <h1 class="text-3xl md:text-5xl font-black mb-3 leading-tight text-secondary">
+                    Springvale Christian Academy
+                </h1>
+                <p class="text-2xl md:text-3xl font-black mb-6 leading-tight">
+                    Where Bright Futures Begin
+                </p>
+                <p class="text-lg md:text-xl mb-8 font-light">
+                    Nurturing minds from Baby Class through Grade 7.
+                </p>
+                <a href="#admissions" class="inline-block px-8 py-3 bg-secondary text-primary font-bold rounded-full shadow-lg hover:bg-yellow-300 transition duration-300 transform hover:scale-105">
+                    Enroll Today
+                </a>
+            </div>
+        </section>
+
+        <!-- Academic Overview Section -->
+        <section id="academics" class="py-16 bg-white">
+            <div class="container mx-auto px-4 text-center">
+                <span class="text-accent uppercase text-sm font-bold">Our Philosophy</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-primary mt-2 mb-8">
+                    A Full Educational Journey
+                </h2>
+                <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <!-- Pillar 1: Early Foundation -->
+                    <div class="p-6 bg-blue-50 rounded-xl shadow-md">
+                        <svg data-lucide="smile" class="w-10 h-10 text-accent mx-auto mb-3"></svg>
+                        <h3 class="text-xl font-bold text-primary mb-2">Early Years (Baby-Reception)</h3>
+                        <p class="text-gray-600">Focus on play-based learning, cognitive development, and strong social skills in a caring environment.</p>
+                    </div>
+                    <!-- Pillar 2: Primary Curriculum -->
+                    <div class="p-6 bg-blue-50 rounded-xl shadow-md">
+                        <svg data-lucide="book-open" class="w-10 h-10 text-accent mx-auto mb-3"></svg>
+                        <h3 class="text-xl font-bold text-primary mb-2">Core Grades (Grade 1-7)</h3>
+                        <p class="text-gray-600">Comprehensive curriculum covering Math, Science, Language Arts, and Technology, preparing students for secondary school.</p>
+                    </div>
+                    <!-- Pillar 3: Student Development -->
+                    <div class="p-6 bg-blue-50 rounded-xl shadow-md">
+                        <svg data-lucide="users" class="w-10 h-10 text-accent mx-auto mb-3"></svg>
+                        <h3 class="text-xl font-bold text-primary mb-2">Holistic Growth</h3>
+                        <p class="text-gray-600">Emphasis on character building, critical thinking, and co-curricular activities like sports and arts.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Class Levels Section -->
+        <section id="levels" class="py-16 bg-gray-100">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-primary text-center mb-10">
+                    Our Class Structure
+                </h2>
+
+                <!-- Class Cards Container -->
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                    <!-- Early Years Card -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-yellow-400 transform hover:shadow-xl transition duration-300">
+                        <div class="text-4xl font-black text-yellow-500 mb-2">ECE</div>
+                        <h3 class="text-2xl font-bold text-primary mb-2">Early Childhood Education</h3>
+                        <p class="text-gray-600 mb-4">
+                            Includes <strong>Baby Class</strong>, <strong>Nursery</strong>, and <strong>Reception</strong>. Focus is on sensory exploration and foundational learning.
+                        </p>
+                        <ul class="list-disc list-inside text-sm text-gray-500 space-y-1">
+                            <li>Motor Skills Development</li>
+                            <li>Early Numeracy &amp; Literacy</li>
+                            <li>Social Play</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Lower Primary Card -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-green-400 transform hover:shadow-xl transition duration-300">
+                        <div class="text-4xl font-black text-green-500 mb-2">G1-3</div>
+                        <h3 class="text-2xl font-bold text-primary mb-2">Lower Primary</h3>
+                        <p class="text-gray-600 mb-4">
+                            Grades <strong>1, 2, and 3</strong>. Transition from play-based to structured learning with core subjects.
+                        </p>
+                        <ul class="list-disc list-inside text-sm text-gray-500 space-y-1">
+                            <li>Reading Fluency</li>
+                            <li>Basic Arithmetic</li>
+                            <li>Introduction to Science</li>
+                        </ul>
+                    </div>
+
+                    <!-- Middle Primary Card -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-blue-400 transform hover:shadow-xl transition duration-300">
+                        <div class="text-4xl font-black text-blue-500 mb-2">G4-5</div>
+                        <h3 class="text-2xl font-bold text-primary mb-2">Middle Primary</h3>
+                        <p class="text-gray-600 mb-4">
+                            Grades <strong>4 and 5</strong>. Developing independence, research skills, and deeper subject understanding.
+                        </p>
+                        <ul class="list-disc list-inside text-sm text-gray-500 space-y-1">
+                            <li>Complex Problem Solving</li>
+                            <li>History &amp; Geography</li>
+                            <li>Digital Literacy</li>
+                        </ul>
+                    </div>
+
+                    <!-- Upper Primary Card -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-red-400 transform hover:shadow-xl transition duration-300">
+                        <div class="text-4xl font-black text-red-500 mb-2">G6-7</div>
+                        <h3 class="text-2xl font-bold text-primary mb-2">Upper Primary</h3>
+                        <p class="text-gray-600 mb-4">
+                            Grades <strong>6 and 7</strong>. Final preparation for secondary school, including exam techniques and advanced concepts.
+                        </p>
+                        <ul class="list-disc list-inside text-sm text-gray-500 space-y-1">
+                            <li>Critical Analysis</li>
+                            <li>Advanced STEM</li>
+                            <li>Leadership Programs</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Admissions & Contact Section -->
+        <section id="admissions" class="py-16 bg-white">
+            <div class="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+                
+                <!-- Admissions Form/Details -->
+                <div class="p-8 border border-gray-200 rounded-xl shadow-lg">
+                    <h2 class="text-3xl font-extrabold text-primary mb-4">Admissions</h2>
+                    <p class="text-lg text-gray-600 mb-6">
+                        We welcome applications for the upcoming school year across all classes.
+                    </p>
+
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center text-gray-700">
+                            <span class="font-bold w-24 text-primary">Key Dates:</span> Applications open Oct 1st.
+                        </li>
+                        <li class="flex items-center text-gray-700">
+                            <span class="font-bold w-24 text-primary">Process:</span> Submit online form, interview, and placement test (G1+).
+                        </li>
+                        <li class="flex items-center text-gray-700">
+                            <span class="font-bold w-24 text-primary">Tours:</span> Book a school tour every Tuesday and Thursday.
+                        </li>
+                    </ul>
+                    
+                    <form id="application-form" class="space-y-4" enctype="multipart/form-data">
+                        <div>
+                            <label class="block text-left text-sm font-medium mb-1">Full name <span class="text-red-600">*</span></label>
+                            <input name="name" required minlength="2" placeholder="Enter your full name" title="Full name (minimum 2 characters)" class="w-full p-2 rounded border focus:outline-none focus:ring-2 focus:ring-accent" />
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-left text-sm font-medium mb-1">Email <span class="text-red-600">*</span></label>
+                                <input name="email" type="email" required placeholder="springvalechristianacademy2025@gmail.com" title="Valid email address" class="w-full p-2 rounded border focus:outline-none focus:ring-2 focus:ring-accent" />
+                            </div>
+                            <div>
+                                <label class="block text-left text-sm font-medium mb-1">Phone <span class="text-red-600">*</span></label>
+                                <input name="phone" required placeholder="+260 77 261 0039" title="Phone number" class="w-full p-2 rounded border focus:outline-none focus:ring-2 focus:ring-accent" />
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-left text-sm font-medium mb-1">Class Level</label>
+                            <select name="class_level" title="Select a class level" aria-label="Class Level selection" class="w-full p-2 rounded border focus:outline-none focus:ring-2 focus:ring-accent">
+                                <option value="">Select a class level</option>
+                                <option value="Early Childhood">Early Childhood</option>
+                                <option value="Lower Primary">Lower Primary (G1-3)</option>
+                                <option value="Middle Primary">Middle Primary (G4-5)</option>
+                                <option value="Upper Primary">Upper Primary (G6-7)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-left text-sm font-medium mb-1">Supporting Document (optional)</label>
+                            <input name="document" type="file" accept=".pdf,.jpg,.jpeg,.png" title="Upload a PDF, JPG, or PNG file (max 10MB)" aria-label="Supporting document upload" class="w-full p-2 rounded border" />
+                            <p class="text-xs text-gray-500 mt-1">PDF, JPG, or PNG only (max 10MB)</p>
+                        </div>
+                        <div>
+                            <label class="block text-left text-sm font-medium mb-1">Additional Notes</label>
+                            <textarea name="notes" rows="3" placeholder="Any additional information..." title="Additional notes about the application" class="w-full p-2 rounded border focus:outline-none focus:ring-2 focus:ring-accent"></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" id="submit-btn" class="w-full py-3 bg-accent text-white font-bold rounded-lg shadow-md hover:bg-emerald-600 transition duration-300 disabled:opacity-50">Submit Application</button>
+                        </div>
+                        <div id="form-message" class="text-sm p-3 rounded hidden"></div>
+                    </form>
+
+                    <script>
+                        document.getElementById('application-form').addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            const form = e.target;
+                            const btn = document.getElementById('submit-btn');
+                            const msg = document.getElementById('form-message');
+
+                            btn.disabled = true;
+                            btn.textContent = 'Submitting...';
+                            msg.classList.add('hidden');
+
+                            try {
+                                const data = new FormData(form);
+                                const resp = await fetch('/api/applications', {
+                                    method: 'POST',
+                                    body: data
+                                });
+                                const json = await resp.json();
+
+                                msg.classList.remove('hidden');
+                                if (resp.ok) {
+                                    msg.className = 'text-sm p-3 rounded bg-green-100 text-green-700 border border-green-300';
+                                    msg.textContent = '✓ Application submitted successfully! We will contact you soon.';
+                                    form.reset();
+                                } else {
+                                    msg.className = 'text-sm p-3 rounded bg-red-100 text-red-700 border border-red-300';
+                                    if (json.errors && Array.isArray(json.errors)) {
+                                        msg.textContent = json.errors.map(e => e.msg).join(', ');
+                                    } else {
+                                        msg.textContent = json.error || 'An error occurred. Please try again.';
+                                    }
+                                }
+                            } catch (err) {
+                                msg.classList.remove('hidden');
+                                msg.className = 'text-sm p-3 rounded bg-red-100 text-red-700 border border-red-300';
+                                msg.textContent = 'Network error: ' + err.message;
+                            } finally {
+                                btn.disabled = false;
+                                btn.textContent = 'Submit Application';
+                            }
+                        });
+                    </script>
+                </div>
+
+                <!-- Contact Information -->
+                <div id="contact" class="p-8 bg-primary rounded-xl text-white shadow-xl">
+                    <h2 class="text-3xl font-extrabold mb-4 text-secondary">Get In Touch</h2>
+                    <p class="mb-6 opacity-80">
+                        Have questions about our curriculum or class structure? Contact us anytime.
+                    </p>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex items-center space-x-3">
+                            <svg data-lucide="phone" class="w-5 h-5 text-secondary" aria-hidden="true"></svg>
+                            <a href="tel:+260772610039" class="underline">+260772610039</a>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <svg data-lucide="mail" class="w-5 h-5 text-secondary" aria-hidden="true"></svg>
+                            <a href="mailto:springvalechristianacademy2025@gmail.com" class="underline">springvalechristianacademy2025@gmail.com</a>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <svg data-lucide="map-pin" class="w-5 h-5 text-secondary mt-1"></svg>
+                            <span>plot S/chibo/1856464, Off Great North Road, Behind Katuba School.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-lg font-bold mb-2">Springvale Christian Academy</p>
+            <p class="text-sm text-gray-400">
+                &copy; 2025 All rights reserved. | Dedicated to excellence in foundational education.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

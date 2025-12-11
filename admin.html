@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Springvale Christian Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center px-4">
+        <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+            <h1 class="text-2xl font-bold mb-6 text-gray-800">Admin Login</h1>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Username</label>
+                    <input id="username" type="text" required placeholder="Cornelius Kambita" title="Admin username" class="w-full p-2 rounded border" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Password</label>
+                    <input id="password" type="password" required placeholder="SP100kambita" title="Admin password" class="w-full p-2 rounded border" />
+                </div>
+                <button type="submit" class="w-full py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700">Login</button>
+                <div id="message" class="text-sm"></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="dashboard" class="hidden min-h-screen bg-gray-100 p-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-800">Applications Dashboard</h1>
+                <button onclick="logout()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Logout</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <p class="text-gray-600 text-sm">Total Applications</p>
+                    <p class="text-3xl font-bold text-blue-600" id="total-count">0</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow overflow-hidden">
+                <div class="p-6 border-b">
+                    <h2 class="text-xl font-bold text-gray-800">Recent Submissions</h2>
+                </div>
+                <div id="applications-list" class="overflow-x-auto"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let authToken;
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const credentials = btoa(username + ':' + password);
+
+            try {
+                const resp = await fetch('/api/applications', {
+                    headers: { 'Authorization': 'Basic ' + credentials }
+                });
+                if (resp.ok) {
+                    authToken = credentials;
+                    showDashboard();
+                } else {
+                    document.getElementById('message').textContent = 'Invalid credentials';
+                }
+            } catch (err) {
+                document.getElementById('message').textContent = err.message;
+            }
+        });
+
+        async function showDashboard() {
+            document.getElementById('login-form').parentElement.classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            loadApplications();
+        }
+
+        async function loadApplications() {
+            try {
+                const resp = await fetch('/api/applications', {
+                    headers: { 'Authorization': 'Basic ' + authToken }
+                });
+                const data = await resp.json();
+                const apps = data.applications || [];
+                document.getElementById('total-count').textContent = apps.length;
+
+                let html = '<table class="w-full"><thead><tr class="bg-gray-200"><th class="p-4 text-left">Name</th><th class="p-4 text-left">Email</th><th class="p-4 text-left">Phone</th><th class="p-4 text-left">Class</th><th class="p-4 text-left">Date</th><th class="p-4 text-left">Document</th></tr></thead><tbody>';
+                apps.forEach(app => {
+                    const date = new Date(app.created_at).toLocaleDateString();
+                    const docLink = app.file_path ? `<a href="/${app.file_path}" target="_blank" class="text-blue-600">View</a>` : '—';
+                    html += `<tr class="border-b hover:bg-gray-50"><td class="p-4">${app.name}</td><td class="p-4">${app.email}</td><td class="p-4">${app.phone}</td><td class="p-4">${app.class_level || '—'}</td><td class="p-4">${date}</td><td class="p-4">${docLink}</td></tr>`;
+                });
+                html += '</tbody></table>';
+                document.getElementById('applications-list').innerHTML = html;
+            } catch (err) {
+                alert('Failed to load applications: ' + err.message);
+            }
+        }
+
+        function logout() {
+            authToken = null;
+            document.getElementById('login-form').parentElement.classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+    </script>
+</body>
+</html>
